@@ -23,6 +23,6 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/public_html
+            cd /home/tyagvura/learn-reward
             git pull origin main
             echo "✅ Deploy thành công!"
