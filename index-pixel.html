@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Learner - MARIO QUEST</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        body {
+            background-image: url('image/sky%20retro.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        main {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Pixel Border Style */
+        .pixel-box {
+            background: #FFE6B4;
+            border: 4px solid;
+            border-image: linear-gradient(135deg, #8B4513 0%, #D2B48C 25%, #FFE6B4 50%, #D2B48C 75%, #8B4513 100%) 4;
+            box-shadow: inset 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 -4px 0 rgba(255, 255, 255, 0.3), 4px 4px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Coin Color */
+        .coin {
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #DAA520, 4px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* Red Mario Theme */
+        .mario-btn {
+            background: linear-gradient(180deg, #FF4444 0%, #CC0000 100%);
+            border: 4px solid;
+            border-color: #FF8888 #660000 #660000 #FF8888;
+            color: #FFFFFF;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.1s ease;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .mario-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .mario-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Green Secondary Button */
+        .mario-btn-secondary {
+            background: linear-gradient(180deg, #44FF44 0%, #00CC00 100%);
+            border: 4px solid;
+            border-color: #88FF88 #006600 #006600 #88FF88;
+            color: #1a1a1a;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.1s ease;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .mario-btn-secondary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .mario-btn-secondary:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Blue Button */
+        .mario-btn-blue {
+            background: linear-gradient(180deg, #4444FF 0%, #0000CC 100%);
+            border: 4px solid;
+            border-color: #8888FF #000066 #000066 #8888FF;
+            color: #FFFFFF;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.1s ease;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .mario-btn-blue:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .mario-btn-blue:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Yellow Button */
+        .mario-btn-yellow {
+            background: linear-gradient(180deg, #FFFF44 0%, #CCCC00 100%);
+            border: 4px solid;
+            border-color: #FFFF88 #666600 #666600 #FFFF88;
+            color: #1a1a1a;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.1s ease;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .mario-btn-yellow:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .mario-btn-yellow:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.3), inset 0 4px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mario Card */
+        .mario-card {
+            background: #FFE6B4;
+            border: 4px solid;
+            border-color: #FFD700 #8B4513 #8B4513 #FFD700;
+            box-shadow: inset 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 -4px 0 rgba(255, 255, 255, 0.3), 4px 4px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Navigation */
+        .mario-nav {
+            background: linear-gradient(180deg, #FF4444 0%, #CC0000 100%);
+            border-bottom: 8px solid #990000;
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-active {
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+            border-bottom: 4px solid #FFD700;
+            box-shadow: inset 0 -4px 0 #00AA00;
+        }
+
+        .tab-inactive {
+            color: #FFFFFF;
+            text-shadow: 2px 2px 0 #000;
+            transition: all 0.1s ease;
+        }
+
+        .tab-inactive:hover {
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        /* Glowing Text */
+        .title-mario {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #FFD700;
+            text-shadow: 4px 4px 0 #000, 2px 2px 0 #FF0000;
+        }
+
+        /* Progress Bar Pixel Style */
+        .progress-bar-mario {
+            background: #00CC00;
+            border: 2px solid #006600;
+            box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Streak Badge */
+        .mario-badge {
+            background: linear-gradient(180deg, #FFD700 0%, #DAA520 100%);
+            border: 4px solid;
+            border-color: #FFFF88 #884400 #884400 #FFFF88;
+            box-shadow: inset 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 -4px 0 rgba(255, 255, 255, 0.3), 4px 4px 0 rgba(0, 0, 0, 0.3);
+            color: #1a1a1a;
+            font-weight: 900;
+        }
+
+        /* Timer Display */
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #FF0000;
+            text-shadow: 4px 4px 0 #000, 2px 2px 0 #FFD700;
+            font-family: 'Press Start 2P', cursive;
+            line-height: 1;
+        }
+
+        /* Bounce Animation - Removed */
+        .bounce-mario {
+            /* Animation removed */
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse-mario {
+            0%, 100% { box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.5), 0 0 0 8px rgba(255, 215, 0, 0.3); }
+        }
+
+        .pulse-mario {
+            animation: pulse-mario 0.8s ease-in-out infinite;
+        }
+
+        /* Input Styling */
+        .mario-input {
+            background: #FFFACD;
+            border: 4px solid;
+            border-color: #FFD700 #8B4513 #8B4513 #FFD700;
+            color: #1a1a1a;
+            outline: none;
+            transition: all 0.1s ease;
+            box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .mario-input:focus {
+            border-color: #FF4444 #CC0000 #CC0000 #FF4444;
+            background: #FFFFFF;
+            box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.3), 0 0 0 4px #FF4444;
+        }
+
+        .mario-input::placeholder {
+            color: #8B4513;
+            opacity: 0.7;
+        }
+
+        /* Select Styling */
+        select.mario-input {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B4513' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.25rem center;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            appearance: none;
+        }
+
+        /* History Item */
+        .history-item {
+            background: linear-gradient(180deg, #E6F2FF 0%, #B3D9FF 100%);
+            border-left: 6px solid #0000FF;
+            border-right: 6px solid #00CC00;
+            border-top: 4px solid #FFD700;
+            border-bottom: 4px solid #8B4513;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* Skill/Reward Chip */
+        .mario-chip {
+            background: #90EE90;
+            border: 4px solid;
+            border-color: #00FF00 #006600 #006600 #00FF00;
+            color: #1a1a1a;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0;
+            font-weight: 700;
+            transition: all 0.1s ease;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .mario-chip:hover {
+            background: #00FF00;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .mario-chip.delete {
+            border-color: #FF4444 #990000 #990000 #FF8888;
+            background: #FF8888;
+            color: #1a1a1a;
+        }
+
+        .mario-chip.delete:hover {
+            background: #FF4444;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* Skill Button Specific */
+        .skill-btn {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            flex-wrap: nowrap;
+        }
+
+        .skill-btn .btn-icon {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .skill-btn .btn-text {
+            font-size: 1.25rem;
+            line-height: 1.2;
+            letter-spacing: 0.1em;
+            color: white;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        /* Modal */
+        .reward-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .reward-modal.hidden {
+            display: none;
+        }
+
+        .reward-modal-content {
+            background: linear-gradient(180deg, #FFE6B4 0%, #FFD700 100%);
+            border: 8px solid;
+            border-color: #FFD700 #8B4513 #8B4513 #FFD700;
+            padding: 3rem;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 0 8px #000, 0 16px 0 rgba(0, 0, 0, 0.3);
+            animation: modalBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalBounce {
+            0% {
+                transform: scale(0.5) translateY(-50px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .reward-modal-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1;
+        }
+
+        .reward-modal-title {
+            font-size: 1rem;
+            color: #FF0000;
+            letter-spacing: 0.1em;
+            text-shadow: 3px 3px 0 #000, 1px 1px 0 #FFD700;
+            margin-bottom: 1rem;
+            font-weight: 900;
+        }
+
+        .reward-modal-reward {
+            font-size: 2.5rem;
+            color: #00CC00;
+            text-shadow: 3px 3px 0 #000;
+            margin-bottom: 2rem;
+            font-weight: 900;
+            line-height: 1.4;
+        }
+
+        .reward-modal-text {
+            color: #0000FF;
+            font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 0 #FFD700;
+        }
+
+        .reward-modal-close {
+            background: linear-gradient(180deg, #00CC00 0%, #009900 100%);
+            border: 4px solid;
+            border-color: #00FF00 #003300 #003300 #00FF00;
+            color: #1a1a1a;
+            padding: 0.75rem 2rem;
+            border-radius: 0;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .reward-modal-close:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .reward-modal-close:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom Text Colors */
+        .text-red-mario {
+            color: #FF0000;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .text-green-mario {
+            color: #00CC00;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .text-blue-mario {
+            color: #0000FF;
+            text-shadow: 2px 2px 0 #FFD700;
+        }
+
+        .text-yellow-mario {
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        /* Toast Message */
+        .mario-toast {
+            background: linear-gradient(180deg, #FFE6B4 0%, #FFD700 100%);
+            border: 4px solid;
+            border-color: #FFD700 #8B4513 #8B4513 #FFD700;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+            color: #1a1a1a;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        /* Animation for appearing */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+        .arcade-chip {
+            background-color: white;
+            border: 4px solid orange;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="mario-nav sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 h-24 flex items-center justify-between">
+            <h1 class="title-mario">🔴 QUEST</h1>
+            <div class="flex gap-8 text-xs font-bold relative">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-active transition-all px-4 py-2">
+                    🎮 GAME
+                </button>
+                <button onclick="switchTab('settings')" id="tab-settings" class="tab-inactive transition-all px-4 py-2">
+                    ⚙️ SETTINGS
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 pt-8 pb-24">
+        
+        <!-- DASHBOARD VIEW -->
+        <div id="view-dashboard" class="space-y-10">
+            
+            <!-- Top Stats & Streak -->
+            <section class="grid grid-cols-2 gap-6 md:grid-cols-2">
+                <div class="mario-card p-6 rounded-none">
+                    <p class="text-blue-mario text-xs font-bold uppercase tracking-widest mb-2">
+                        ⏱️ TIME
+                    </p>
+                    <div class="flex items-baseline gap-2 mt-3">
+                        <span id="todayTotal" class="text-4xl font-black text-green-mario">0</span>
+                        <span class="text-xs text-blue-mario">MIN</span>
+                    </div>
+                </div>
+
+                <div class="mario-badge p-6 rounded-none text-center bounce-mario">
+                    <p class="text-xs font-bold uppercase tracking-wider mb-2 text-orange-900">
+                        🔥 STREAK
+                    </p>
+                    <div class="text-4xl font-black text-orange-900"><span id="streakCount">0</span></div>
+                </div>
+            </section>
+
+            <!-- Daily Goal Progress -->
+            <div class="mario-card p-6 rounded-none space-y-3">
+                <div class="flex justify-between items-center">
+                    <span id="goalText" class="text-blue-mario text-xs font-bold uppercase">🎯 QUEST: 0/4</span>
+                    <span id="goalPercent" class="text-red-mario text-sm font-bold">0%</span>
+                </div>
+                <div class="h-6 bg-white rounded-none overflow-hidden border-4 border-blue-900">
+                    <div id="goalProgress" class="progress-bar-mario h-full transition-all duration-700 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Primary Action Buttons -->
+            <section class="grid grid-cols-1 gap-6">
+                <button id="skillBtn" onclick="pickRandomSkill()" class="mario-btn p-8 rounded-none h-48 skill-btn hover:shadow-2xl">
+                    <div class="btn-icon">🧠</div>
+                    <div class="btn-text">SELECT<br>SKILL</div>
+                </button>
+            </section>
+
+            <!-- Active Task & Timer Card -->
+            <section id="resultBox" class="hidden animate-slide-up">
+                <div class="mario-card p-10 rounded-none pulse-mario">
+                    <div id="aiAssistantBox" class="mb-8 text-center">
+                        <p id="resultType" class="text-red-mario text-xs font-black uppercase tracking-[0.3em] mb-3">
+                            ✨ CHALLENGE
+                        </p>
+                        <h3 id="resultValue" class="text-blue-mario text-2xl md:text-3xl font-black mb-4 break-words"></h3>
+                        <p id="skillDurationInfo" class="text-green-mario text-xs font-bold uppercase tracking-wider"></p>
+                    </div>
+
+                    <!-- Minimal Timer -->
+                    <div id="timerContainer" class="hidden text-center">
+                        <div class="timer-display mb-8" id="timerDisplay">45:00</div>
+                        <div class="flex items-center justify-center gap-6 mb-8" id="timerControls">
+                            <button id="timerBtn" onclick="toggleTimer()" class="mario-btn w-16 h-16 rounded-none flex items-center justify-center font-black text-xl hover:shadow-2xl">
+                                ▶️
+                            </button>
+                            <button id="finishBtn" onclick="finishSkill()" class="hidden mario-btn-green px-8 h-16 rounded-none font-black text-base hover:shadow-2xl">
+                                ✅ DONE
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Treasure Chest Reward -->
+                    <div id="treasureChestBox" class="hidden text-center mt-8">
+                        <button id="treasureChestBtn" onclick="openTreasureChest()" class="mario-btn-yellow mx-auto py-6 px-12 rounded-none font-black text-3xl hover:shadow-2xl transform hover:scale-110 transition-transform duration-300">
+                            💎
+                        </button>
+                        <p class="text-yellow-mario text-xs font-black uppercase tracking-wider mt-4">CLICK REWARD</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Minimal History -->
+            <section class="pt-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-blue-mario text-xs font-black uppercase tracking-widest">📜 LOG</h2>
+                    <button onclick="clearHistory()" class="text-red-mario text-xs font-black hover:text-red-600 transition uppercase tracking-tighter hover:shadow-lg">
+                        CLEAR
+                    </button>
+                </div>
+                <div id="historyList" class="space-y-3"></div>
+            </section>
+        </div>
+
+        <!-- Reward Modal -->
+        <div id="rewardModal" class="reward-modal hidden">
+            <div class="reward-modal-content">
+                <div class="reward-modal-icon">🎁</div>
+                <div class="reward-modal-title">⭐ TREASURE ⭐</div>
+                <div class="reward-modal-reward" id="rewardModalReward"></div>
+                <div class="reward-modal-text">✨ Amazing! ✨</div>
+                <button onclick="closeRewardModal()" class="reward-modal-close">
+                    CLOSE
+                </button>
+            </div>
+        </div>
+
+        <!-- SETTINGS VIEW -->
+        <div id="view-settings" class="hidden space-y-12">
+            
+            <!-- Display Interface Section -->
+            <section class="mario-card p-8 rounded-none">
+                <h3 class="text-red-mario text-xs font-black uppercase tracking-widest mb-6">🎮 GAME MODE</h3>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-blue-mario text-xs font-bold uppercase">CHOOSE LAYOUT:</span>
+                    <select id="interfaceSelect" onchange="changeInterface(this.value)" class="mario-input px-4 py-3 rounded-none text-xs font-black focus:outline-none cursor-pointer">
+                        <option value="index.html">📱 Minimalist</option>
+                        <option value="index-pixel.html">🎮 Pixel</option>
+                        <option value="index-retro.html">🕹️ Retro</option>
+                    </select>
+                </div>
+                <p class="text-blue-mario text-[10px] mt-4 opacity-70 uppercase tracking-wide">⭐ Your choice will be saved</p>
+            </section>
+
+            <!-- Goals Section -->
+            <section class="mario-card p-8 rounded-none">
+                <h3 class="text-red-mario text-xs font-black uppercase tracking-widest mb-6">⚙️ DIFFICULTY</h3>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-blue-mario text-xs font-bold uppercase">TARGET:</span>
+                    <input type="number" id="goalInput" value="4" onchange="updateDailyGoal(this.value)" class="mario-input w-20 p-3 rounded-none text-center font-black text-lg">
+                </div>
+            </section>
+
+            <!-- Skills List -->
+            <section class="space-y-6">
+                <h3 class="text-red-mario text-xs font-black uppercase tracking-widest flex justify-between items-center">
+                    🎮 SKILLS
+                    <span id="skillCountBadge" class="mario-badge px-3 py-1 rounded-none text-orange-900">0</span>
+                </h3>
+                
+                <div class="mario-card p-2 rounded-none flex gap-2">
+                    <input id="skillInput" type="text" placeholder="ADD..." class="mario-input flex-1 px-4 py-3 rounded-none text-sm outline-none">
+                    <button onclick="addSkill()" class="mario-btn px-6 py-3 rounded-none text-sm font-black">+</button>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex gap-2 flex-wrap">
+                        <select id="categorySelect" class="mario-input px-4 py-2 rounded-none text-xs font-bold focus:outline-none">
+                            <option value="Logic">🧠 LOGIC</option>
+                            <option value="Language">🗣️ LANGUAGE</option>
+                            <option value="Physical">💪 PHYSICAL</option>
+                            <option value="Creative">🎨 CREATIVE</option>
+                        </select>
+                        <div class="mario-card px-4 py-2 rounded-none text-xs font-bold flex items-center gap-2">
+                            <input id="durationInput" type="number" value="45" class="w-12 outline-none bg-transparent text-center text-green-mario">
+                            <span class="text-blue-mario">MIN</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Duration Buttons -->
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <button onclick="setDuration(25, 'Pomodoro')" class="mario-chip">⚡ 25M</button>
+                        <button onclick="setDuration(45, 'Standard')" class="mario-chip">🎯 45M</button>
+                        <button onclick="setDuration(90, 'Deep Work')" class="mario-chip">🔥 90M</button>
+                    </div>
+                </div>
+
+                <ul id="skillList" class="grid gap-3"></ul>
+            </section>
+
+            <!-- Rewards List -->
+            <section class="space-y-6">
+                <h3 class="text-yellow-mario text-xs font-black uppercase tracking-widest">🏆 REWARDS</h3>
+                <div class="mario-card p-2 rounded-none flex gap-2">
+                    <input id="rewardInput" type="text" placeholder="ADD..." class="mario-input flex-1 px-4 py-3 rounded-none text-sm outline-none">
+                    <button onclick="addReward()" class="mario-btn-secondary px-6 py-3 rounded-none text-sm font-black">+</button>
+                </div>
+                <ul id="rewardList" class="grid gap-3"></ul>
+            </section>
+
+            <!-- Data Management -->
+            <section class="mario-card p-8 rounded-none">
+                <h3 class="text-blue-mario text-xs font-black uppercase tracking-widest mb-6">💾 DATA</h3>
+                <div class="space-y-3">
+                    <button onclick="exportData()" class="mario-chip w-full justify-center py-3 px-6 rounded-none text-xs font-black border-4 hover:shadow-lg">
+                        📥 EXPORT
+                    </button>
+                    <button onclick="importData()" class="mario-chip w-full justify-center py-3 px-6 rounded-none text-xs font-black border-4 hover:shadow-lg" style="border-color: #FF0000 #990000 #990000 #FF8888; color: #1a1a1a; background: #FF8888;">
+                        📤 IMPORT
+                    </button>
+                    <button onclick="clearHistory()" class="mario-chip w-full justify-center py-3 px-6 rounded-none text-xs font-black border-4 hover:shadow-lg" style="border-color: #FF0000 #990000 #990000 #FF8888; color: #FFFFFF; background: #FF0000;">
+                        🗑️ CLEAR
+                    </button>
+                </div>
+                <p class="text-blue-mario text-xs mt-4 leading-relaxed">
+                    LOCAL STORAGE ONLY
+                </p>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Global Toast Message -->
+    <div id="msgBox" class="fixed bottom-10 left-1/2 -translate-x-1/2 mario-toast text-center px-8 py-4 rounded-none font-black hidden z-50 text-xs animate-slide-up border-4">
+        <p id="msgContent"></p>
+    </div>
+
+    <script src="js/db-manager.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+    <script src="js/script-ver2.js"></script>
+</body>
+</html>

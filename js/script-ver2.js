@@ -23,21 +23,6 @@ let timeLeft = 0;
 let currentActiveSkill = null;
 let isActiveLocked = false;
 
-const encouragements = [];
-
-
-// --- CORE LOGIC ---
-async function saveData() {
-    await dbManager.saveData('skills', skills);
-    await dbManager.saveData('rewards', rewards);
-    await dbManager.saveData('history', history);
-    await dbManager.saveData('dailyGoal', dailyGoal);
-    await dbManager.saveData('streak', streak);
-    await dbManager.saveData('lastFinishedDate', lastFinishedDate);
-    await dbManager.saveData('interface', currentInterface);
-    updateStats();
-}
-
 // --- INTERFACE MANAGEMENT ---
 async function changeInterface(interfaceName) {
     currentInterface = interfaceName;
@@ -57,19 +42,57 @@ function getInterfaceName(filename) {
     return names[filename] || filename;
 }
 
+// --- CONFETTI EFFECT ---
+function triggerConfetti() {
+    if (typeof confetti === 'undefined') return;
+    
+    // Multiple bursts for more dramatic effect
+    const confettiConfig = {
+        particleCount: 100,
+        spread: 70,
+        gravity: 0.5,
+        decay: 0.94,
+        scalar: 1.2
+    };
+    
+    // Center burst
+    confetti({
+        ...confettiConfig,
+        origin: { x: 0.5, y: 0.5 }
+    });
+    
+    // Left burst
+    setTimeout(() => {
+        confetti({
+            ...confettiConfig,
+            origin: { x: 0.2, y: 0.3 },
+            angle: 60
+        });
+    }, 100);
+    
+    // Right burst
+    setTimeout(() => {
+        confetti({
+            ...confettiConfig,
+            origin: { x: 0.8, y: 0.3 },
+            angle: 120
+        });
+    }, 200);
+}
 
-
-// --- UI ACTIONS ---
+// --- UI & INTERACTION ---
 function switchTab(tab) {
     document.getElementById('view-dashboard').classList.toggle('hidden', tab !== 'dashboard');
     document.getElementById('view-settings').classList.toggle('hidden', tab !== 'settings');
     document.getElementById('tab-dashboard').classList.toggle('tab-active', tab === 'dashboard');
+    document.getElementById('tab-dashboard').classList.toggle('tab-inactive', tab !== 'dashboard');
     document.getElementById('tab-settings').classList.toggle('tab-active', tab === 'settings');
+    document.getElementById('tab-settings').classList.toggle('tab-inactive', tab !== 'settings');
 }
 
-function showMessage(text) {
+function showMessage(msg) {
     const box = document.getElementById('msgBox');
-    document.getElementById('msgContent').innerText = text;
+    document.getElementById('msgContent').innerText = msg;
     box.classList.remove('hidden');
     setTimeout(() => box.classList.add('hidden'), 3000);
 }
@@ -79,15 +102,14 @@ function setDuration(mins, type) {
     showMessage(`Selected ${mins}m (${type})`);
 }
 
-
-
 function toggleTimer() {
-    const icon = document.getElementById('timerIcon');
+    const icon = document.getElementById('timerBtn');
     const finish = document.getElementById('finishBtn');
+    
     if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = null;
-        icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        icon.innerText = '▶';
     } else {
         finish.classList.remove('hidden');
         timerInterval = setInterval(() => {
@@ -96,12 +118,12 @@ function toggleTimer() {
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 timerInterval = null;
-                document.getElementById('timerDisplay').classList.add('text-green-500');
+                document.getElementById('timerDisplay').classList.add('neon-yellow');
                 playBeep();
-                showMessage("Time's up! Well done.");
+                showMessage("⏰ Time's up! Well done.");
             }
         }, 1000);
-        icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        icon.innerText = '⏸';
     }
 }
 
@@ -112,9 +134,11 @@ function playBeep() {
         const gain = ctx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(880, ctx.currentTime);
-        osc.connect(gain); gain.connect(ctx.destination);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
         gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        osc.start(); osc.stop(ctx.currentTime + 0.5);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
     } catch (e) {}
 }
 
@@ -128,45 +152,35 @@ function pickRandomSkill() {
     if (skills.length === 0) return switchTab('settings');
     if (isActiveLocked) return;
     
+    // Close reward modal if open
+    document.getElementById('rewardModal').classList.add('hidden');
+    
     currentActiveSkill = skills[Math.floor(Math.random() * skills.length)];
     timeLeft = currentActiveSkill.duration * 60;
     updateTimerDisplay();
     
     isActiveLocked = true;
     document.getElementById('skillBtn').disabled = true;
-    document.getElementById('rewardBtn').disabled = true;
     document.getElementById('skillBtn').classList.add('opacity-50', 'cursor-not-allowed');
-    document.getElementById('rewardBtn').classList.add('opacity-50', 'cursor-not-allowed');
     
     document.getElementById('resultBox').classList.remove('hidden');
-    document.getElementById('resultType').innerText = "Challenge";
+    
+    // Reset reward display if it was showing
+    document.getElementById('aiAssistantBox').classList.add('hidden');
+    document.getElementById('treasureChestBox').classList.add('hidden');
+    
+    document.getElementById('resultType').innerText = "▶ MISSION SELECTED";
     document.getElementById('resultValue').innerText = currentActiveSkill.name;
-    document.getElementById('skillDurationInfo').innerText = `${currentActiveSkill.duration} mins • ${currentActiveSkill.category}`;
+    document.getElementById('skillDurationInfo').innerText = `${currentActiveSkill.duration} MINS • ${currentActiveSkill.category}`;
     document.getElementById('timerContainer').classList.remove('hidden');
     
+    // Make sure timer elements are visible
+    document.getElementById('timerDisplay').classList.remove('hidden');
+    document.getElementById('timerControls').classList.remove('hidden');
+    document.getElementById('timerBtn').classList.remove('hidden');
+    document.getElementById('finishBtn').classList.add('hidden');
+    
     window.scrollTo({ top: document.getElementById('resultBox').offsetTop - 100, behavior: 'smooth' });
-}
-
-function pickRandomReward() {
-    if (rewards.length === 0) return switchTab('settings');
-    if (isActiveLocked) return;
-    
-    isActiveLocked = true;
-    document.getElementById('skillBtn').disabled = true;
-    document.getElementById('rewardBtn').disabled = true;
-    document.getElementById('skillBtn').classList.add('opacity-50', 'cursor-not-allowed');
-    document.getElementById('rewardBtn').classList.add('opacity-50', 'cursor-not-allowed');
-    
-    _showRandomReward();
-}
-
-function _showRandomReward() {
-    const reward = rewards[Math.floor(Math.random() * rewards.length)];
-    document.getElementById('resultBox').classList.remove('hidden');
-    document.getElementById('resultType').innerText = "Your Reward";
-    document.getElementById('resultValue').innerText = reward.name;
-    document.getElementById('timerContainer').classList.add('hidden');
-    document.getElementById('skillDurationInfo').innerText = "";
 }
 
 async function finishSkill() {
@@ -175,32 +189,90 @@ async function finishSkill() {
         streak = (lastFinishedDate === new Date(Date.now() - 86400000).toLocaleDateString()) ? streak + 1 : 1;
         lastFinishedDate = today;
     }
-    history.unshift({ name: currentActiveSkill.name, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), date: today, duration: currentActiveSkill.duration });
+    
+    history.unshift({ 
+        name: currentActiveSkill.name, 
+        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), 
+        date: today, 
+        duration: currentActiveSkill.duration
+    });
     
     clearInterval(timerInterval);
     timerInterval = null;
     
-    // Unlock buttons
-    isActiveLocked = false;
-    document.getElementById('skillBtn').disabled = false;
-    document.getElementById('rewardBtn').disabled = false;
-    document.getElementById('skillBtn').classList.remove('opacity-50', 'cursor-not-allowed');
-    document.getElementById('rewardBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+    // Hide timer/controls elements
+    document.getElementById('timerDisplay').classList.add('hidden');
+    document.getElementById('timerControls').classList.add('hidden');
+    document.getElementById('timerBtn').classList.add('hidden');
+    document.getElementById('finishBtn').classList.add('hidden');
+    
+    // Show treasure chest
+    document.getElementById('treasureChestBox').classList.remove('hidden');
     
     await saveData();
+    showMessage("🎮 SESSION COMPLETE! Open the treasure chest!");
+}
+
+// --- TREASURE CHEST MECHANIC (Ver2) ---
+async function openTreasureChest() {
+    if (rewards.length === 0) return switchTab('settings');
     
-    // Show reward automatically
-    _showRandomReward();
-    showMessage("Well done! Here's your reward.");
+    const reward = rewards[Math.floor(Math.random() * rewards.length)];
+    
+    // Animate chest opening
+    const btn = document.getElementById('treasureChestBtn');
+    btn.classList.add('blink');
+    
+    // Show reward modal after animation
+    setTimeout(() => {
+        document.getElementById('rewardModalReward').innerText = reward.name;
+        document.getElementById('rewardModal').classList.remove('hidden');
+        
+        // Trigger confetti effect multiple times for more dramatic effect
+        triggerConfetti();
+        setTimeout(() => triggerConfetti(), 200);
+        setTimeout(() => triggerConfetti(), 400);
+        
+        // Enable PICK A SKILL button to start new session
+        isActiveLocked = false;
+        document.getElementById('skillBtn').disabled = false;
+        document.getElementById('skillBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+        
+        btn.classList.remove('blink');
+    }, 800);
+}
+
+function closeRewardModal() {
+    // Hide modal
+    document.getElementById('rewardModal').classList.add('hidden');
+    
+    // Hide treasure chest and result box
+    document.getElementById('treasureChestBox').classList.add('hidden');
+    document.getElementById('aiAssistantBox').classList.add('hidden');
+    document.getElementById('resultBox').classList.add('hidden');
+    document.getElementById('timerContainer').classList.add('hidden');
+    
+    // Show timer elements again for potential next session
+    document.getElementById('timerDisplay').classList.remove('hidden');
+    document.getElementById('timerControls').classList.remove('hidden');
+    document.getElementById('timerDisplay').classList.remove('neon-yellow');
+    
+    renderAll();
 }
 
 // --- DATA MGMT ---
 async function addSkill() {
     const name = document.getElementById('skillInput').value.trim();
     if (!name) return;
-    skills.push({ id: Date.now(), name, category: document.getElementById('categorySelect').value, duration: parseInt(document.getElementById('durationInput').value) || 45 });
+    skills.push({ 
+        id: Date.now(), 
+        name, 
+        category: document.getElementById('categorySelect').value, 
+        duration: parseInt(document.getElementById('durationInput').value) || 45 
+    });
     document.getElementById('skillInput').value = '';
-    await saveData(); renderAll();
+    await saveData(); 
+    renderAll();
 }
 
 async function addReward() {
@@ -208,12 +280,29 @@ async function addReward() {
     if (!name) return;
     rewards.push({ id: Date.now(), name });
     document.getElementById('rewardInput').value = '';
-    await saveData(); renderAll();
+    await saveData(); 
+    renderAll();
 }
 
-async function updateDailyGoal(v) { dailyGoal = parseInt(v) || 4; await saveData(); }
-async function clearHistory() { if(confirm("Clear history?")) { history = []; await saveData(); renderAll(); } }
-async function deleteItem(type, id) { if (type === 'skill') skills = skills.filter(s => s.id !== id); else rewards = rewards.filter(r => r.id !== id); await saveData(); renderAll(); }
+async function updateDailyGoal(v) { 
+    dailyGoal = parseInt(v) || 4; 
+    await saveData(); 
+}
+
+async function clearHistory() { 
+    if(confirm("Clear history?")) { 
+        history = []; 
+        await saveData(); 
+        renderAll(); 
+    } 
+}
+
+async function deleteItem(type, id) { 
+    if (type === 'skill') skills = skills.filter(s => s.id !== id); 
+    else rewards = rewards.filter(r => r.id !== id); 
+    await saveData(); 
+    renderAll(); 
+}
 
 function updateStats() {
     const today = new Date().toLocaleDateString();
@@ -222,7 +311,7 @@ function updateStats() {
     
     document.getElementById('streakCount').innerText = streak;
     document.getElementById('todayTotal').innerText = totalMins;
-    document.getElementById('goalText').innerText = `Goal: ${todayLogs.length}/${dailyGoal} sessions`;
+    document.getElementById('goalText').innerText = `📊 DAILY QUEST: ${todayLogs.length}/${dailyGoal}`;
     const p = Math.min((todayLogs.length / dailyGoal) * 100, 100);
     document.getElementById('goalProgress').style.width = p + "%";
     document.getElementById('goalPercent').innerText = Math.round(p) + "%";
@@ -230,49 +319,63 @@ function updateStats() {
 }
 
 function renderAll() {
+    // Render skills
     document.getElementById('skillList').innerHTML = skills.map(s => `
-        <li class="bg-white p-5 rounded-2xl border border-gray-100 flex items-center justify-between group soft-shadow">
+        <li class="arcade-chip py-4 px-6 rounded-lg border-2 gap-4 flex items-center justify-between">
             <div>
-                <p class="font-bold text-sm text-gray-800">${s.name}</p>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">${s.duration} MINS • ${s.category}</p>
+                <p class="neon-lime font-black text-sm">${s.name}</p>
+                <p class="neon-cyan text-[10px] font-bold uppercase tracking-wider mt-1">${s.duration} MINS • ${s.category}</p>
             </div>
-            <button onclick="deleteItem('skill', ${s.id})" class="text-gray-200 hover:text-red-400 transition">✕</button>
+            <button onclick="deleteItem('skill', ${s.id})" class="text-red-400 hover:text-red-500 font-black text-lg transition">✕</button>
         </li>
     `).join('');
 
+    // Render rewards
     document.getElementById('rewardList').innerHTML = rewards.map(r => `
-        <li class="bg-white p-5 rounded-2xl border border-gray-100 flex items-center justify-between soft-shadow">
-            <span class="text-sm font-medium text-gray-700">${r.name}</span>
-            <button onclick="deleteItem('reward', ${r.id})" class="text-gray-200 hover:text-red-400 transition">✕</button>
+        <li class="arcade-chip py-4 px-6 rounded-lg border-2 gap-4 flex items-center justify-between">
+            <span class="neon-lime font-black text-sm">${r.name}</span>
+            <button onclick="deleteItem('reward', ${r.id})" class="text-red-400 hover:text-red-500 font-black text-lg transition">✕</button>
         </li>
     `).join('');
 
+    // Render history
     const hList = document.getElementById('historyList');
     const today = new Date().toLocaleDateString();
     const todayLogs = history.filter(h => h.date === today);
     
     hList.innerHTML = todayLogs.length ? todayLogs.map(h => `
-        <div class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-50 soft-shadow">
-            <div class="w-2 h-2 rounded-full bg-green-400"></div>
-            <div class="flex-1">
-                <div class="flex justify-between">
-                    <p class="text-sm font-bold text-gray-800">${h.name}</p>
-                    <span class="text-[10px] font-bold text-gray-400">${h.time}</span>
-                </div>
+        <div class="history-item rounded-lg">
+            <div class="flex items-center justify-between mb-2">
+                <p class="neon-lime font-black text-sm">${h.name}</p>
+                <span class="neon-cyan text-[10px] font-bold">${h.time}</span>
             </div>
         </div>
-    `).join('') : '<p class="text-center py-10 text-xs text-gray-300 font-medium">No activity today</p>';
+    `).join('') : '<p class="text-center py-10 neon-cyan text-xs font-bold">NO ACTIVITY TODAY - PICK A SKILL!</p>';
     
     updateStats();
 }
 
 // --- DATA PERSISTENCE (IndexedDB) ---
+async function saveData() {
+    try {
+        await dbManager.saveData('skills', skills);
+        await dbManager.saveData('rewards', rewards);
+        await dbManager.saveData('history', history);
+        await dbManager.saveData('dailyGoal', dailyGoal);
+        await dbManager.saveData('streak', streak);
+        await dbManager.saveData('lastFinishedDate', lastFinishedDate);
+        await dbManager.saveData('interface', currentInterface);
+    } catch (error) {
+        console.error('Error saving data:', error);
+    }
+}
+
 async function initializeApp() {
     try {
-        // Khởi tạo IndexedDB
+        // Initialize IndexedDB
         await dbManager.init();
 
-        // Tải dữ liệu từ IndexedDB
+        // Load data
         const savedSkills = await dbManager.getData('skills');
         const savedRewards = await dbManager.getData('rewards');
         const savedHistory = await dbManager.getData('history');
@@ -281,7 +384,7 @@ async function initializeApp() {
         const savedLastDate = await dbManager.getData('lastFinishedDate');
         const savedInterface = await dbManager.getData('interface');
 
-        // Gán dữ liệu hoặc sử dụng mặc định
+        // Assign data
         skills = savedSkills || DEFAULT_SKILLS;
         rewards = savedRewards || DEFAULT_REWARDS;
         history = savedHistory || [];
@@ -296,11 +399,10 @@ async function initializeApp() {
             interfaceSelect.value = currentInterface;
         }
 
-        // Render UI
+        document.getElementById('goalInput').value = dailyGoal;
         renderAll();
     } catch (error) {
-        console.error('Lỗi khởi tạo ứng dụng:', error);
-        // Fallback: sử dụng dữ liệu mặc định
+        console.error('Error initializing app:', error);
         skills = DEFAULT_SKILLS;
         rewards = DEFAULT_REWARDS;
         history = [];
@@ -313,9 +415,9 @@ async function initializeApp() {
 async function exportData() {
     try {
         await dbManager.exportToJSON();
-        showMessage("✓ Dữ liệu đã export thành công!");
+        showMessage("✓ Data exported successfully!");
     } catch (error) {
-        showMessage("✗ Lỗi export dữ liệu: " + error.message);
+        showMessage("✗ Export error: " + error.message);
     }
 }
 
@@ -327,28 +429,28 @@ function importData() {
         if (e.target.files.length === 0) return;
         try {
             await dbManager.importFromJSON(e.target.files[0]);
-            showMessage("✓ Dữ liệu đã import thành công! Tải lại trang...");
+            showMessage("✓ Data imported! Reloading...");
             setTimeout(() => location.reload(), 1500);
         } catch (error) {
-            showMessage("✗ Lỗi import dữ liệu: " + error.message);
+            showMessage("✗ Import error: " + error.message);
         }
     };
     input.click();
 }
 
-// Khởi tạo ứng dụng khi page load
+// Initialize on load
 async function checkInterfaceAndInitialize() {
     try {
-        // Khởi tạo IndexedDB để kiểm tra interface preference
+        // Initialize IndexedDB to check interface preference
         await dbManager.init();
         const savedInterface = await dbManager.getData('interface');
         
         if (savedInterface) {
-            // Lấy tên file HTML hiện tại
+            // Get current HTML filename
             const currentFile = window.location.pathname.split('/').pop() || 'index.html';
             currentInterface = savedInterface;
             
-            // Nếu interface không khớp, redirect
+            // If interface doesn't match, redirect
             if (currentFile !== savedInterface && savedInterface !== '') {
                 window.location.href = savedInterface;
                 return;
@@ -358,7 +460,7 @@ async function checkInterfaceAndInitialize() {
         console.log('Interface check skipped');
     }
     
-    // Tiếp tục khởi tạo app
+    // Continue with app initialization
     initializeApp();
 }
 
