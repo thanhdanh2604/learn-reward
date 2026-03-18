@@ -1,0 +1,47 @@
+name: 🚀 Auto Deploy via Rsync
+
+on:
+  push:
+    branches:
+      - main  # ← Đổi thành branch của bạn
+
+jobs:
+  deploy:
+    name: Build & Deploy to cPanel Hosting
+    runs-on: ubuntu-latest
+
+    steps:
+      # ─── 1. Checkout code ───────────────────────────────────────────
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      # ─── 2. (Tuỳ chọn) Setup Node.js nếu cần build ─────────────────
+      # Bỏ comment nếu project React/Vue/Next.js:
+      # - name: ⚙️ Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      #     cache: 'npm'
+      #
+      # - name: 📦 Install dependencies
+      #   run: npm ci
+      #
+      # - name: 🔨 Build project
+      #   run: npm run build
+      #   env:
+      #     CI: false
+
+      # ─── 3. Deploy bằng Rsync ────────────────────────────────────────
+      - name: 📤 Rsync files to server
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete --exclude='.git*' --exclude='node_modules' --exclude='.env'
+          path: ./              # ← Đổi thành ./dist hoặc ./build nếu có bước build
+          remote_path: /home/tyagvura/learn-reward   # ← Đường dẫn trên server
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_user: ${{ secrets.SSH_USERNAME }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_port: ${{ secrets.SSH_PORT }}
+
+      - name: ✅ Deploy thành công
+        run: echo "Deploy hoàn tất!"
