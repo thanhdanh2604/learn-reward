@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Learner - Minimalist AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body class="bg-[#fafafa] text-[#1a1a1a] min-h-screen">
 
@@ -110,9 +110,9 @@
                 <div class="flex items-center justify-between">
                     <span class="text-sm font-medium text-gray-600">Choose your layout:</span>
                     <select id="interfaceSelect" onchange="changeInterface(this.value)" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-200 cursor-pointer hover:border-indigo-300 transition">
-                        <option value="index.html">📱 Minimalist</option>
-                        <option value="index-pixel.html">🎮 Pixel</option>
-                        <option value="index-retro.html">🕹️ Retro</option>
+                        <option value="minimalist">📱 Minimalist</option>
+                        <option value="pixel">🎮 Pixel</option>
+                        <option value="retro">🕹️ Retro</option>
                     </select>
                 </div>
                 <p class="text-[10px] text-gray-400 mt-4">Interface preference will be saved and applied when you open the app.</p>
@@ -193,12 +193,24 @@
 
     </main>
 
+    <!-- Reward Modal -->
+    <div id="rewardModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center max-w-md shadow-2xl animate-bounce">
+            <div class="text-6xl mb-4">🎁</div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">✨ REWARD ✨</h2>
+            <p id="rewardModalReward" class="text-lg font-bold text-indigo-600 mb-6"></p>
+            <button onclick="closeRewardModal()" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold hover:bg-indigo-700 transition">
+                CLOSE
+            </button>
+        </div>
+    </div>
+
     <!-- Global Toast Message -->
     <div id="msgBox" class="fixed bottom-10 left-1/2 -translate-x-1/2 glass-card text-gray-900 px-8 py-4 rounded-full shadow-2xl hidden z-50 text-xs font-bold border border-gray-100 animate-bounce text-center">
         <p id="msgContent"></p>
     </div>
 
-    <script src="js/db-manager.js"></script>
-    <script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,56 @@
+{
+    "skills": [
+        {
+            "id": 1,
+            "name": "Laravel Refactoring",
+            "category": "Logic",
+            "duration": 45
+        },
+        {
+            "id": 2,
+            "name": "English Listening A2",
+            "category": "Language",
+            "duration": 25
+        },
+        {
+            "id": 3,
+            "name": "Boxing Training",
+            "category": "Physical",
+            "duration": 15
+        }
+    ],
+    "rewards": [
+        {
+            "id": 1,
+            "name": "15m Jazz music"
+        },
+        {
+            "id": 2,
+            "name": "A cup of milk coffee"
+        }
+    ],
+    "history": [
+        {
+            "id": 1773908343,
+            "name": "English Listening A2",
+            "duration": 25,
+            "category": "Language",
+            "time": "15:19",
+            "date": "3\/19\/2026"
+        },
+        {
+            "id": 1773908348,
+            "name": "Laravel Refactoring",
+            "duration": 45,
+            "category": "Logic",
+            "time": "15:19",
+            "date": "3\/19\/2026"
+        }
+    ],
+    "settings": {
+        "dailyGoal": 4,
+        "currentInterface": "pixel",
+        "streak": 1,
+        "lastFinishedDate": "3\/19\/2026"
+    }
+}

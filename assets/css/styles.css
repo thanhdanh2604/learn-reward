@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    letter-spacing: -0.01em;
+}
+
+.soft-shadow { 
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.04); 
+}
+
+.tab-active { 
+    color: #4f46e5; 
+}
+
+.tab-active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #4f46e5;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.ai-shimmer {
+    background: linear-gradient(90deg, #f9fafb 0%, #f3f4f6 50%, #f9fafb 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer { 
+    0% { background-position: 200% 0; } 
+    100% { background-position: -200% 0; } 
+}
+
+.no-scrollbar::-webkit-scrollbar { 
+    display: none; 
+}
+
+.no-scrollbar { 
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+}

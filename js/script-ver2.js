@@ -5,7 +5,6 @@ let history = [];
 let dailyGoal = 4;
 let streak = 0;
 let lastFinishedDate = "";
-let currentInterface = "index.html"; // Default interface
 
 const DEFAULT_SKILLS = [
     { id: 1, name: 'Laravel Refactoring', category: 'Logic', duration: 45 },
@@ -22,25 +21,6 @@ let timerInterval = null;
 let timeLeft = 0;
 let currentActiveSkill = null;
 let isActiveLocked = false;
-
-// --- INTERFACE MANAGEMENT ---
-async function changeInterface(interfaceName) {
-    currentInterface = interfaceName;
-    const select = document.getElementById('interfaceSelect');
-    if (select) select.value = interfaceName;
-    await saveData();
-    // Redirect immediately without delay
-    window.location.href = interfaceName;
-}
-
-function getInterfaceName(filename) {
-    const names = {
-        'index.html': 'Minimalist',
-        'index-pixel.html': 'Pixel',
-        'index-retro.html': 'Retro'
-    };
-    return names[filename] || filename;
-}
 
 // --- CONFETTI EFFECT ---
 function triggerConfetti() {
@@ -364,7 +344,6 @@ async function saveData() {
         await dbManager.saveData('dailyGoal', dailyGoal);
         await dbManager.saveData('streak', streak);
         await dbManager.saveData('lastFinishedDate', lastFinishedDate);
-        await dbManager.saveData('interface', currentInterface);
     } catch (error) {
         console.error('Error saving data:', error);
     }
@@ -382,7 +361,6 @@ async function initializeApp() {
         const savedDailyGoal = await dbManager.getData('dailyGoal');
         const savedStreak = await dbManager.getData('streak');
         const savedLastDate = await dbManager.getData('lastFinishedDate');
-        const savedInterface = await dbManager.getData('interface');
 
         // Assign data
         skills = savedSkills || DEFAULT_SKILLS;
@@ -391,13 +369,6 @@ async function initializeApp() {
         dailyGoal = savedDailyGoal || 4;
         streak = savedStreak || 0;
         lastFinishedDate = savedLastDate || "";
-        currentInterface = savedInterface || 'index.html';
-
-        // Update interface select
-        const interfaceSelect = document.getElementById('interfaceSelect');
-        if (interfaceSelect) {
-            interfaceSelect.value = currentInterface;
-        }
 
         document.getElementById('goalInput').value = dailyGoal;
         renderAll();
@@ -406,7 +377,6 @@ async function initializeApp() {
         skills = DEFAULT_SKILLS;
         rewards = DEFAULT_REWARDS;
         history = [];
-        currentInterface = 'index.html';
         renderAll();
     }
 }
@@ -439,29 +409,4 @@ function importData() {
 }
 
 // Initialize on load
-async function checkInterfaceAndInitialize() {
-    try {
-        // Initialize IndexedDB to check interface preference
-        await dbManager.init();
-        const savedInterface = await dbManager.getData('interface');
-        
-        if (savedInterface) {
-            // Get current HTML filename
-            const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-            currentInterface = savedInterface;
-            
-            // If interface doesn't match, redirect
-            if (currentFile !== savedInterface && savedInterface !== '') {
-                window.location.href = savedInterface;
-                return;
-            }
-        }
-    } catch (e) {
-        console.log('Interface check skipped');
-    }
-    
-    // Continue with app initialization
-    initializeApp();
-}
-
-document.addEventListener('DOMContentLoaded', checkInterfaceAndInitialize);
+document.addEventListener('DOMContentLoaded', initializeApp);

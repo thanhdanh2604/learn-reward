@@ -439,7 +439,7 @@
             transform: scale(0.95);
         }
     </style>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
 
@@ -518,7 +518,7 @@
                         <div class="timer-display mb-8" id="timerDisplay">45:00</div>
                         <div class="flex items-center justify-center gap-6 mb-8" id="timerControls">
                             <button id="timerBtn" onclick="toggleTimer()" class="arcade-btn w-16 h-16 rounded-full flex items-center justify-center font-black text-xl hover:shadow-2xl">
-                                ▶
+                                <svg id="timerIcon" fill="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;"><path d="M8 5v14l11-7z"/></svg>
                             </button>
                             <button id="finishBtn" onclick="finishSkill()" class="hidden arcade-btn-secondary px-8 h-16 rounded-lg font-black text-base hover:shadow-2xl">
                                 ✅ FINISH
@@ -528,7 +528,7 @@
 
                     <!-- Treasure Chest Reward -->
                     <div id="treasureChestBox" class="hidden text-center mt-8">
-                        <button id="treasureChestBtn" onclick="openTreasureChest()" class="arcade-btn-secondary mx-auto py-6 px-12 rounded-lg font-black text-3xl hover:shadow-2xl transform hover:scale-110 transition-transform duration-300">
+                        <button id="rewardBtn" onclick="pickRandomReward()" class="arcade-btn-secondary mx-auto py-6 px-12 rounded-lg font-black text-3xl hover:shadow-2xl transform hover:scale-110 transition-transform duration-300">
                             💎
                         </button>
                         <p class="neon-yellow text-xs font-black uppercase tracking-wider mt-4">CLICK FOR REWARD</p>
@@ -570,9 +570,9 @@
                 <div class="flex items-center justify-between gap-4">
                     <span class="neon-cyan text-sm font-bold uppercase">CHOOSE LAYOUT:</span>
                     <select id="interfaceSelect" onchange="changeInterface(this.value)" class="arcade-input px-4 py-3 rounded-lg text-sm font-black focus:outline-none cursor-pointer">
-                        <option value="index.html">📱 Minimalist</option>
-                        <option value="index-pixel.html">🎮 Pixel</option>
-                        <option value="index-retro.html">🕹️ Retro</option>
+                        <option value="minimalist">📱 Minimalist</option>
+                        <option value="pixel">🎮 Pixel</option>
+                        <option value="retro">🕹️ Retro</option>
                     </select>
                 </div>
                 <p class="neon-cyan text-[10px] mt-4 opacity-70 uppercase tracking-wide">★ Your layout choice will be saved automatically</p>
@@ -661,8 +661,7 @@
         <p id="msgContent"></p>
     </div>
 
-    <script src="js/db-manager.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
-    <script src="js/script-ver2.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

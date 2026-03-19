@@ -12,7 +12,7 @@
         }
 
         body {
-            background-image: url('image/sky%20retro.jpg');
+            background-image: url('assets/images/sky%20retro.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -469,6 +469,15 @@
             background-color: white;
             border: 4px solid orange;
         }
+
+        /* Emoji Icon Styling */
+        .emoji-icon {
+            display: inline-block;
+            font-size: 1.5em;
+            line-height: 1;
+            margin-right: 0.25em;
+            vertical-align: -0.15em;
+        }
     </style>
 </head>
 <body>
@@ -497,7 +506,7 @@
             <section class="grid grid-cols-2 gap-6 md:grid-cols-2">
                 <div class="mario-card p-6 rounded-none">
                     <p class="text-blue-mario text-xs font-bold uppercase tracking-widest mb-2">
-                        ⏱️ TIME
+                        <span class="emoji-icon">⏱️</span> TIME
                     </p>
                     <div class="flex items-baseline gap-2 mt-3">
                         <span id="todayTotal" class="text-4xl font-black text-green-mario">0</span>
@@ -507,7 +516,7 @@
 
                 <div class="mario-badge p-6 rounded-none text-center bounce-mario">
                     <p class="text-xs font-bold uppercase tracking-wider mb-2 text-orange-900">
-                        🔥 STREAK
+                        <span class="emoji-icon">🔥</span> STREAK
                     </p>
                     <div class="text-4xl font-black text-orange-900"><span id="streakCount">0</span></div>
                 </div>
@@ -516,7 +525,7 @@
             <!-- Daily Goal Progress -->
             <div class="mario-card p-6 rounded-none space-y-3">
                 <div class="flex justify-between items-center">
-                    <span id="goalText" class="text-blue-mario text-xs font-bold uppercase">🎯 QUEST: 0/4</span>
+                    <span id="goalText" class="text-blue-mario text-xs font-bold uppercase"><span class="emoji-icon">🎯</span> QUEST: 0/4</span>
                     <span id="goalPercent" class="text-red-mario text-sm font-bold">0%</span>
                 </div>
                 <div class="h-6 bg-white rounded-none overflow-hidden border-4 border-blue-900">
@@ -548,7 +557,7 @@
                         <div class="timer-display mb-8" id="timerDisplay">45:00</div>
                         <div class="flex items-center justify-center gap-6 mb-8" id="timerControls">
                             <button id="timerBtn" onclick="toggleTimer()" class="mario-btn w-16 h-16 rounded-none flex items-center justify-center font-black text-xl hover:shadow-2xl">
-                                ▶️
+                                <svg id="timerIcon" fill="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;"><path d="M8 5v14l11-7z"/></svg>
                             </button>
                             <button id="finishBtn" onclick="finishSkill()" class="hidden mario-btn-green px-8 h-16 rounded-none font-black text-base hover:shadow-2xl">
                                 ✅ DONE
@@ -558,7 +567,7 @@
 
                     <!-- Treasure Chest Reward -->
                     <div id="treasureChestBox" class="hidden text-center mt-8">
-                        <button id="treasureChestBtn" onclick="openTreasureChest()" class="mario-btn-yellow mx-auto py-6 px-12 rounded-none font-black text-3xl hover:shadow-2xl transform hover:scale-110 transition-transform duration-300">
+                        <button id="rewardBtn" onclick="pickRandomReward()" class="mario-btn-yellow mx-auto py-6 px-12 rounded-none font-black text-3xl hover:shadow-2xl transform hover:scale-110 transition-transform duration-300">
                             💎
                         </button>
                         <p class="text-yellow-mario text-xs font-black uppercase tracking-wider mt-4">CLICK REWARD</p>
@@ -569,7 +578,7 @@
             <!-- Minimal History -->
             <section class="pt-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-blue-mario text-xs font-black uppercase tracking-widest">📜 LOG</h2>
+                    <h2 class="text-blue-mario text-xs font-black uppercase tracking-widest"><span class="emoji-icon">📜</span> LOG</h2>
                     <button onclick="clearHistory()" class="text-red-mario text-xs font-black hover:text-red-600 transition uppercase tracking-tighter hover:shadow-lg">
                         CLEAR
                     </button>
@@ -596,13 +605,13 @@
             
             <!-- Display Interface Section -->
             <section class="mario-card p-8 rounded-none">
-                <h3 class="text-red-mario text-xs font-black uppercase tracking-widest mb-6">🎮 GAME MODE</h3>
+                <h3 class="text-red-mario text-xs font-black uppercase tracking-widest mb-6"><span class="emoji-icon">🎮</span> GAME MODE</h3>
                 <div class="flex items-center justify-between gap-4">
                     <span class="text-blue-mario text-xs font-bold uppercase">CHOOSE LAYOUT:</span>
                     <select id="interfaceSelect" onchange="changeInterface(this.value)" class="mario-input px-4 py-3 rounded-none text-xs font-black focus:outline-none cursor-pointer">
-                        <option value="index.html">📱 Minimalist</option>
-                        <option value="index-pixel.html">🎮 Pixel</option>
-                        <option value="index-retro.html">🕹️ Retro</option>
+                        <option value="minimalist">📱 Minimalist</option>
+                        <option value="pixel">🎮 Pixel</option>
+                        <option value="retro">🕹️ Retro</option>
                     </select>
                 </div>
                 <p class="text-blue-mario text-[10px] mt-4 opacity-70 uppercase tracking-wide">⭐ Your choice will be saved</p>
@@ -610,7 +619,7 @@
 
             <!-- Goals Section -->
             <section class="mario-card p-8 rounded-none">
-                <h3 class="text-red-mario text-xs font-black uppercase tracking-widest mb-6">⚙️ DIFFICULTY</h3>
+                <h3 class="text-red-mario text-xs font-black uppercase tracking-widest mb-6"><span class="emoji-icon">⚙️</span> DIFFICULTY</h3>
                 <div class="flex items-center justify-between gap-4">
                     <span class="text-blue-mario text-xs font-bold uppercase">TARGET:</span>
                     <input type="number" id="goalInput" value="4" onchange="updateDailyGoal(this.value)" class="mario-input w-20 p-3 rounded-none text-center font-black text-lg">
@@ -620,7 +629,7 @@
             <!-- Skills List -->
             <section class="space-y-6">
                 <h3 class="text-red-mario text-xs font-black uppercase tracking-widest flex justify-between items-center">
-                    🎮 SKILLS
+                    <span class="emoji-icon">🎮</span> SKILLS
                     <span id="skillCountBadge" class="mario-badge px-3 py-1 rounded-none text-orange-900">0</span>
                 </h3>
                 
@@ -656,7 +665,7 @@
 
             <!-- Rewards List -->
             <section class="space-y-6">
-                <h3 class="text-yellow-mario text-xs font-black uppercase tracking-widest">🏆 REWARDS</h3>
+                <h3 class="text-yellow-mario text-xs font-black uppercase tracking-widest"><span class="emoji-icon">🏆</span> REWARDS</h3>
                 <div class="mario-card p-2 rounded-none flex gap-2">
                     <input id="rewardInput" type="text" placeholder="ADD..." class="mario-input flex-1 px-4 py-3 rounded-none text-sm outline-none">
                     <button onclick="addReward()" class="mario-btn-secondary px-6 py-3 rounded-none text-sm font-black">+</button>
@@ -666,7 +675,7 @@
 
             <!-- Data Management -->
             <section class="mario-card p-8 rounded-none">
-                <h3 class="text-blue-mario text-xs font-black uppercase tracking-widest mb-6">💾 DATA</h3>
+                <h3 class="text-blue-mario text-xs font-black uppercase tracking-widest mb-6"><span class="emoji-icon">💾</span> DATA</h3>
                 <div class="space-y-3">
                     <button onclick="exportData()" class="mario-chip w-full justify-center py-3 px-6 rounded-none text-xs font-black border-4 hover:shadow-lg">
                         📥 EXPORT
@@ -691,8 +700,7 @@
         <p id="msgContent"></p>
     </div>
 
-    <script src="js/db-manager.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
-    <script src="js/script-ver2.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
