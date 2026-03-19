@@ -87,7 +87,18 @@ class DataManager
     public function addSkill($name, $category, $duration)
     {
         $data = $this->loadData();
-        $id = isset($data['skills']) ? (max(array_column($data['skills'], 'id')) + 1) : 1;
+        
+        // Generate next ID safely
+        $id = 1;
+        if (isset($data['skills']) && count($data['skills']) > 0) {
+            $ids = array_column($data['skills'], 'id');
+            $id = max($ids) + 1;
+        }
+        
+        // Initialize skills array if not exists
+        if (!isset($data['skills'])) {
+            $data['skills'] = [];
+        }
         
         $data['skills'][] = [
             'id' => $id,
@@ -129,7 +140,18 @@ class DataManager
     public function addReward($name)
     {
         $data = $this->loadData();
-        $id = isset($data['rewards']) ? (max(array_column($data['rewards'], 'id')) + 1) : 1;
+        
+        // Generate next ID safely
+        $id = 1;
+        if (isset($data['rewards']) && count($data['rewards']) > 0) {
+            $ids = array_column($data['rewards'], 'id');
+            $id = max($ids) + 1;
+        }
+        
+        // Initialize rewards array if not exists
+        if (!isset($data['rewards'])) {
+            $data['rewards'] = [];
+        }
         
         $data['rewards'][] = [
             'id' => $id,

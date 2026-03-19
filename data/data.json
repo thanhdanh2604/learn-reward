@@ -2,21 +2,45 @@
     "skills": [
         {
             "id": 1,
-            "name": "Laravel Refactoring",
+            "name": "Hello 1",
             "category": "Logic",
             "duration": 45
         },
         {
-            "id": 2,
-            "name": "English Listening A2",
-            "category": "Language",
+            "id": 3,
+            "name": "Hello 2",
+            "category": "Logic",
+            "duration": 45
+        },
+        {
+            "id": 4,
+            "name": "English 2",
+            "category": "Logic",
+            "duration": 45
+        },
+        {
+            "id": 5,
+            "name": "Test Skill",
+            "category": "Logic",
             "duration": 25
         },
         {
-            "id": 3,
-            "name": "Boxing Training",
-            "category": "Physical",
-            "duration": 15
+            "id": 6,
+            "name": "Test Skill 2",
+            "category": "Language",
+            "duration": 30
+        },
+        {
+            "id": 7,
+            "name": "Test3",
+            "category": "Creative",
+            "duration": 60
+        },
+        {
+            "id": 8,
+            "name": "Test Skill Final",
+            "category": "Logic",
+            "duration": 25
         }
     ],
     "rewards": [
@@ -31,19 +55,11 @@
     ],
     "history": [
         {
-            "id": 1773908343,
-            "name": "English Listening A2",
-            "duration": 25,
-            "category": "Language",
-            "time": "15:19",
-            "date": "3\/19\/2026"
-        },
-        {
-            "id": 1773908348,
-            "name": "Laravel Refactoring",
+            "id": 1773908649,
+            "name": "English 2",
             "duration": 45,
             "category": "Logic",
-            "time": "15:19",
+            "time": "15:24",
             "date": "3\/19\/2026"
         }
     ],

@@ -4,6 +4,8 @@
  */
 header('Content-Type: application/json; charset=utf-8');
 
+error_log("updateSettings.php called");
+
 require_once __DIR__ . '/../includes/DataManager.php';
 
 try {
@@ -21,9 +23,12 @@ try {
         'data' => $settings
     ], JSON_UNESCAPED_UNICODE);
 } catch (Exception $e) {
+    error_log("updateSettings.php error: " . $e->getMessage());
     http_response_code(400);
     echo json_encode([
         'success' => false,
         'error' => $e->getMessage()
     ], JSON_UNESCAPED_UNICODE);
+    exit;
 }
+?>

@@ -4,6 +4,8 @@
  */
 header('Content-Type: application/json; charset=utf-8');
 
+error_log("deleteReward.php called");
+
 require_once __DIR__ . '/../includes/DataManager.php';
 
 try {
@@ -21,9 +23,12 @@ try {
         'message' => 'Xóa reward thành công'
     ], JSON_UNESCAPED_UNICODE);
 } catch (Exception $e) {
+    error_log("deleteReward.php error: " . $e->getMessage());
     http_response_code(400);
     echo json_encode([
         'success' => false,
         'error' => $e->getMessage()
     ], JSON_UNESCAPED_UNICODE);
+    exit;
 }
+?>

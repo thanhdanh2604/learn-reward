@@ -4,6 +4,8 @@
  */
 header('Content-Type: application/json; charset=utf-8');
 
+error_log("getData.php called");
+
 require_once __DIR__ . '/../includes/DataManager.php';
 
 try {
@@ -15,9 +17,12 @@ try {
         'data' => $data
     ], JSON_UNESCAPED_UNICODE);
 } catch (Exception $e) {
+    error_log("getData.php error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'success' => false,
         'error' => $e->getMessage()
     ], JSON_UNESCAPED_UNICODE);
+    exit;
 }
+?>

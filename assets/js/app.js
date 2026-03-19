@@ -1,47 +1,112 @@
 // --- API CALLS ---
 const API = {
-    getData: () => fetch('api/getData.php').then(r => r.json()),
-    addSkill: (name, category, duration) => 
-        fetch('api/addSkill.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, category, duration })
-        }).then(r => r.json()),
-    deleteSkill: (id) =>
-        fetch('api/deleteSkill.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id })
-        }).then(r => r.json()),
-    addReward: (name) =>
-        fetch('api/addReward.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name })
-        }).then(r => r.json()),
-    deleteReward: (id) =>
-        fetch('api/deleteReward.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id })
-        }).then(r => r.json()),
-    finishSession: (skillName, duration, category) =>
-        fetch('api/finishSession.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ skillName, duration, category })
-        }).then(r => r.json()),
-    clearHistory: () =>
-        fetch('api/clearHistory.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        }).then(r => r.json()),
-    updateSettings: (settings) =>
-        fetch('api/updateSettings.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(settings)
-        }).then(r => r.json())
+    getData: async () => {
+        try {
+            const response = await fetch('api/getData.php');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            console.error('getData error:', e);
+            throw e;
+        }
+    },
+    addSkill: async (name, category, duration) => {
+        try {
+            const response = await fetch('api/addSkill.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, category, duration })
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            console.error('addSkill error:', e);
+            throw e;
+        }
+    },
+    deleteSkill: async (id) => {
+        try {
+            const response = await fetch('api/deleteSkill.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            console.error('deleteSkill error:', e);
+            throw e;
+        }
+    },
+    addReward: async (name) => {
+        try {
+            const response = await fetch('api/addReward.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            console.error('addReward error:', e);
+            throw e;
+        }
+    },
+    deleteReward: async (id) => {
+        try {
+            const response = await fetch('api/deleteReward.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            console.error('deleteReward error:', e);
+            throw e;
+        }
+    },
+    finishSession: async (skillName, duration, category) => {
+        try {
+            const response = await fetch('api/finishSession.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ skillName, duration, category })
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            console.error('finishSession error:', e);
+            throw e;
+        }
+    },
+    clearHistory: async () => {
+        try {
+            const response = await fetch('api/clearHistory.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            console.error('clearHistory error:', e);
+            throw e;
+        }
+    },
+    updateSettings: async (settings) => {
+        try {
+            const response = await fetch('api/updateSettings.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            console.error('updateSettings error:', e);
+            throw e;
+        }
+    }
 };
 
 // --- DATA STATE ---
