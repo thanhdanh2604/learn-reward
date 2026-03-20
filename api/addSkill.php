@@ -4,14 +4,20 @@
  */
 header('Content-Type: application/json; charset=utf-8');
 
-error_log("addSkill.php called");
+error_log("=== addSkill.php called ===");
 
 require_once __DIR__ . '/../includes/DataManager.php';
 
 try {
-    $input = json_decode(file_get_contents('php://input'), true);
+    // Get raw input
+    $rawInput = file_get_contents('php://input');
+    error_log("Raw input: " . $rawInput);
+    
+    $input = json_decode($rawInput, true);
+    error_log("Parsed input: " . json_encode($input));
     
     if (!$input || !isset($input['name']) || !isset($input['category']) || !isset($input['duration'])) {
+        error_log("Missing fields - input: " . print_r($input, true));
         throw new Exception('Thiếu thông tin bắt buộc: name, category, duration');
     }
     

@@ -339,14 +339,22 @@ async function addSkill() {
     const category = document.getElementById('categorySelect').value;
     const duration = parseInt(document.getElementById('durationInput').value) || 45;
     
-    const response = await API.addSkill(name, category, duration);
-    if (response.success) {
-        document.getElementById('skillInput').value = '';
-        await loadData();
-        renderAll();
-        showMessage('✓ Skill added');
-    } else {
-        showMessage('✗ Error: ' + response.error);
+    console.log('addSkill - Sending:', { name, category, duration });
+    
+    try {
+        const response = await API.addSkill(name, category, duration);
+        console.log('addSkill - Response:', response);
+        if (response.success) {
+            document.getElementById('skillInput').value = '';
+            await loadData();
+            renderAll();
+            showMessage('✓ Skill added');
+        } else {
+            showMessage('✗ Error: ' + response.error);
+        }
+    } catch (error) {
+        console.error('addSkill - Exception:', error);
+        showMessage('✗ Error adding skill: ' + error.message);
     }
 }
 

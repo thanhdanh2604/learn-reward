@@ -1,46 +1,28 @@
 {
     "skills": [
         {
-            "id": 1,
-            "name": "Hello 1",
-            "category": "Logic",
-            "duration": 45
-        },
-        {
-            "id": 3,
-            "name": "Hello 2",
-            "category": "Logic",
-            "duration": 45
-        },
-        {
-            "id": 4,
-            "name": "English 2",
-            "category": "Logic",
-            "duration": 45
-        },
-        {
-            "id": 5,
-            "name": "Test Skill",
-            "category": "Logic",
-            "duration": 25
-        },
-        {
-            "id": 6,
-            "name": "Test Skill 2",
-            "category": "Language",
-            "duration": 30
-        },
-        {
-            "id": 7,
-            "name": "Test3",
-            "category": "Creative",
-            "duration": 60
-        },
-        {
             "id": 8,
             "name": "Test Skill Final",
             "category": "Logic",
             "duration": 25
+        },
+        {
+            "id": 9,
+            "name": "12312",
+            "category": "Logic",
+            "duration": 45
+        },
+        {
+            "id": 10,
+            "name": "Manual Test",
+            "category": "Logic",
+            "duration": 25
+        },
+        {
+            "id": 11,
+            "name": "Test Debug",
+            "category": "Logic",
+            "duration": 30
         }
     ],
     "rewards": [
